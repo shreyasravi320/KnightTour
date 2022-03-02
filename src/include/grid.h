@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <string>
 using namespace std;
 
 template <typename T>
@@ -11,16 +12,16 @@ class Grid
 
 public:
     Grid();
-    Grid(int n, int m);
     Grid(int n, int m, T val);
     ~Grid();
 
     void print(ostream &out=cout);
 
-    int getRows();
-    int getCols();
+    int getRows() const;
+    int getCols() const;
 
     vector<T> &operator[](int i);
+    Grid<T> &operator=(const vector<vector<T>> &rhs);
     
 private:
     vector<vector<T>> grid;
@@ -30,15 +31,6 @@ template <typename T>
 Grid<T>::Grid()
 {
 
-}
-
-template <typename T>
-Grid<T>::Grid(int n, int m)
-{
-    for (int i = 0; i < n; i++)
-    {
-        grid.push_back(vector<T>(m));
-    }
 }
 
 template <typename T>
@@ -57,13 +49,24 @@ Grid<T>::~Grid()
 }
 
 template <typename T>
-int Grid<T>::getRows()
+Grid<T> &Grid<T>::operator=(const vector<vector<T>> &rhs)
+{
+    if (grid != rhs)
+    {
+        grid = rhs;
+    }
+
+    return *this;
+}
+
+template <typename T>
+int Grid<T>::getRows() const
 {
     return grid.size();
 }
 
 template <typename T>
-int Grid<T>::getCols()
+int Grid<T>::getCols() const
 {
     return grid[0].size();
 }
@@ -87,6 +90,5 @@ vector<T> &Grid<T>::operator[](int i)
 {
     return grid[i];
 }
-
 
 #endif
