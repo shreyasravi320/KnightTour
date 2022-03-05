@@ -14,6 +14,7 @@ public:
     Grid();
     Grid(int n, int m, T val);
     ~Grid();
+    Grid(vector<vector<T>> &rhs);
 
     void print(ostream &out=cout);
 
@@ -46,6 +47,15 @@ template <typename T>
 Grid<T>::~Grid()
 {
 
+}
+
+template <typename T>
+Grid<T>::Grid(vector<vector<T>> &rhs)
+{
+    if (grid != rhs)
+    {
+        grid = rhs;
+    }
 }
 
 template <typename T>
