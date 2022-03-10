@@ -1,11 +1,30 @@
 #include "include/knight.h"
 
+/*
+ * Custom operators in C++ taken from this StackOverflow link:
+ * https://stackoverflow.com/questions/1515399/can-you-make-custom-operators-in-c
+ * 
+ * Main purpose is to create a mod operation that always returns a positive number
+ */
+
+#define operator(ReturnType, OperatorName, FirstOperandType, SecondOperandType) OperatorName ## _ {} OperatorName; template <typename T> struct OperatorName ## Proxy{public:OperatorName ## Proxy(const T& t) : t_(t){}const T& t_;static ReturnType _ ## OperatorName ## _(const FirstOperandType a, const SecondOperandType b);};template <typename T> OperatorName ## Proxy<T> operator<(const T& lhs, const OperatorName ## _& rhs){return OperatorName ## Proxy<T>(lhs);}ReturnType operator>(const OperatorName ## Proxy<FirstOperandType>& lhs, const SecondOperandType& rhs){return OperatorName ## Proxy<FirstOperandType>::_ ## OperatorName ## _(lhs.t_, rhs);}template <typename T> inline ReturnType OperatorName ## Proxy<T>::_ ## OperatorName ## _(const FirstOperandType a, const SecondOperandType b)
+
+const struct operator(int, mod, int, int)
+{
+    return (a % b + b) % b;
+};
+
+#define mod <mod>
+
 Grid<int> SOLUTION_6x6;
 Grid<int> SOLUTION_6x8;
 Grid<int> SOLUTION_8x8;
 Grid<int> SOLUTION_8x10;
 Grid<int> SOLUTION_10x10;
 Grid<int> SOLUTION_10x12;
+
+vector<int> delta_i = {1, 2,  2,  1, -1, -2, -2, -1};
+vector<int> delta_j = {2, 1, -1, -2, -2, -1,  1,  2};
 
 bool isValid(int n, int m, int i, int j)
 {
@@ -28,7 +47,7 @@ void populateSolutions()
     {
         { 0, 39, 18,  9, 28, 35, 20, 11},
         {17,  8, 47, 38, 19, 10, 27, 36},
-        {40,  1, 19, 29, 34, 37, 12, 21},
+        {40,  1, 16, 29, 34, 37, 12, 21},
         { 7, 46,  5,  2, 43, 24, 31, 26},
         { 4, 41, 44, 15, 30, 33, 22, 13},
         {45,  6,  3, 42, 23, 14, 25, 32}
@@ -74,7 +93,7 @@ void populateSolutions()
 
     SOLUTION_10x12 = 
     {
-        {  0,   3, 118,  99,  64,   6,  68, 101,  70,   7,  74, 103},
+        {  0,   3, 118,  99,  64,   5,  68, 101,  70,   7,  74, 103},
         {117,  98,   1,   4,  67, 100,  41,   6,  27, 102,  71,   8},
         {  2, 119,  96,  63,  40,  65,  24,  69,  38,  73, 104,  75},
         { 97, 116,  47,  66,  61,  42,  39,  26,  59,  28,   9,  72},
@@ -102,6 +121,7 @@ void solveClosedTourHelper(Grid<int> &grid, Segment &segment, int i, int j, int 
                 for (int l = j; l < j + m; l++)
                 {
                     grid[k][l] = move + SOLUTION_6x6[k - i][l - j];
+                    grid(move + SOLUTION_6x6[k - i][l - j]) = {k, l};
                 }
             }
         }
@@ -113,6 +133,7 @@ void solveClosedTourHelper(Grid<int> &grid, Segment &segment, int i, int j, int 
                 for (int l = j; l < j + m; l++)
                 {
                     grid[k][l] = move + SOLUTION_6x8[k - i][l - j];
+                    grid(move + SOLUTION_6x8[k - i][l - j]) = {k, l};
                 }
             }
         }
@@ -124,6 +145,7 @@ void solveClosedTourHelper(Grid<int> &grid, Segment &segment, int i, int j, int 
                 for (int l = j; l < j + m; l++)
                 {
                     grid[k][l] = move + SOLUTION_6x8[l - j][k - i];
+                    grid(move + SOLUTION_6x8[l - j][k - i]) = {k, l};
                 }
             }
         }
@@ -135,6 +157,7 @@ void solveClosedTourHelper(Grid<int> &grid, Segment &segment, int i, int j, int 
                 for (int l = j; l < j + m; l++)
                 {
                     grid[k][l] = move + SOLUTION_8x8[k - i][l - j];
+                    grid(move + SOLUTION_8x8[k - i][l - j]) = {k, l};
                 }
             }
         }
@@ -146,6 +169,7 @@ void solveClosedTourHelper(Grid<int> &grid, Segment &segment, int i, int j, int 
                 for (int l = j; l < j + m; l++)
                 {
                     grid[k][l] = move + SOLUTION_8x10[k - i][l - j];
+                    grid(move + SOLUTION_8x10[k - i][l - j]) = {k, l};
                 }
             }
         }
@@ -157,6 +181,7 @@ void solveClosedTourHelper(Grid<int> &grid, Segment &segment, int i, int j, int 
                 for (int l = j; l < j + m; l++)
                 {
                     grid[k][l] = move + SOLUTION_8x10[l - j][k - i];
+                    grid(move + SOLUTION_8x10[l - j][k - i]) = {k, l};
                 }
             }
         }
@@ -168,6 +193,7 @@ void solveClosedTourHelper(Grid<int> &grid, Segment &segment, int i, int j, int 
                 for (int l = j; l < j + m; l++)
                 {
                     grid[k][l] = move + SOLUTION_10x10[k - i][l - j];
+                    grid(move + SOLUTION_10x10[k - i][l - j]) = {k, l};
                 }
             }
         }
@@ -179,6 +205,7 @@ void solveClosedTourHelper(Grid<int> &grid, Segment &segment, int i, int j, int 
                 for (int l = j; l < j + m; l++)
                 {
                     grid[k][l] = move + SOLUTION_10x12[k - i][l - j];
+                    grid(move + SOLUTION_10x12[k - i][l - j]) = {k, l};
                 }
             }
         }
@@ -190,6 +217,7 @@ void solveClosedTourHelper(Grid<int> &grid, Segment &segment, int i, int j, int 
                 for (int l = j; l < j + m; l++)
                 {
                     grid[k][l] = move + SOLUTION_10x12[l - j][k - i];
+                    grid(move + SOLUTION_10x12[l - j][k - i]) = {k, l};
                 }
             }
         }
@@ -231,23 +259,23 @@ void solveClosedTourHelper(Grid<int> &grid, Segment &segment, int i, int j, int 
          *  |           |           |
          *  |-----------|-----------|
          */
-        if (n == m and n % 4 == 0)
+        if (n == m and n mod 4 == 0)
         {
-            // first section
+            // first segment
             segment.segments[0] = new Segment(n / 2, n / 2, i, j);
             solveClosedTourHelper(grid, *segment.segments[0], i, j, n / 2, n / 2, move);
 
-            // second section
+            // second segment
             move += (n / 2 * n / 2);
             segment.segments[1] = new Segment(n / 2, n / 2, i, j + n / 2);
             solveClosedTourHelper(grid, *segment.segments[1], i, j + n / 2, n / 2, n / 2, move);
 
-            // third section
+            // third segment
             move += (n / 2 * n / 2);
             segment.segments[2] = new Segment(n / 2, n / 2, i + n / 2, j + n / 2);
             solveClosedTourHelper(grid, *segment.segments[2], i + n / 2, j + n / 2, n / 2, n / 2, move);
 
-            // fourth section
+            // fourth segment
             move += (n / 2 * n / 2);
             segment.segments[3] = new Segment(n / 2, n / 2, i + n / 2, j);
             solveClosedTourHelper(grid, *segment.segments[3], i + n / 2, j, n / 2, n / 2, move);
@@ -271,25 +299,25 @@ void solveClosedTourHelper(Grid<int> &grid, Segment &segment, int i, int j, int 
          *  |           |           |
          *  |-----------|-----------|
          */
-        if ((n == m - 2 and n % 4 == 0) or (m == n - 2 and m % 4 == 0))
+        if ((n == m - 2 and n mod 4 == 0) or (m == n - 2 and m mod 4 == 0))
         {
             if (n == m - 2)
             {
-                // first section
+                // first segment
                 segment.segments[0] = new Segment(n / 2, n / 2, i, j);
                 solveClosedTourHelper(grid, *segment.segments[0], i, j, n / 2, n / 2, move);
 
-                // second section
+                // second segment
                 move += (n / 2 * n / 2);
                 segment.segments[1] = new Segment(n / 2, n / 2 + 2, i, j + n / 2);
                 solveClosedTourHelper(grid, *segment.segments[1], i, j + n / 2, n / 2, n / 2 + 2, move);
 
-                // third section
+                // third segment
                 move += (n / 2) * (n / 2);
                 segment.segments[2] = new Segment(n / 2, n / 2 + 2, i + n / 2, j + n / 2);
                 solveClosedTourHelper(grid, *segment.segments[2], i + n / 2, j + n / 2, n / 2, n / 2 + 2, move);
 
-                // fourth section
+                // fourth segment
                 move += (n / 2) * (n / 2 + 2);
                 segment.segments[3] = new Segment(n / 2, n / 2, i + n / 2, j);
                 solveClosedTourHelper(grid, *segment.segments[3], i + n / 2, j, n / 2, n / 2, move);
@@ -297,21 +325,21 @@ void solveClosedTourHelper(Grid<int> &grid, Segment &segment, int i, int j, int 
 
             else
             {
-                // first section
+                // first segment
                 segment.segments[0] = new Segment(m / 2, m / 2, i, j);
                 solveClosedTourHelper(grid, *segment.segments[0], i, j, m / 2, m / 2, move);
 
-                // second section
+                // second segment
                 move += (m / 2 * m / 2);
                 segment.segments[1] = new Segment(m / 2, m / 2, i, j + m / 2);
                 solveClosedTourHelper(grid, *segment.segments[1], i, j + m / 2, m / 2, m / 2, move);
 
-                // third section
+                // third segment
                 move += (m / 2) * (m / 2);
                 segment.segments[2] = new Segment(m / 2 + 2, m / 2, i + m / 2, j + m / 2);
                 solveClosedTourHelper(grid, *segment.segments[2], i + m / 2, j + m / 2, m / 2 + 2, m / 2, move);
 
-                // fourth section
+                // fourth segment
                 move += (m / 2) * (m / 2 + 2);
                 segment.segments[3] = new Segment(m / 2 + 2, m / 2, i + m / 2, j);
                 solveClosedTourHelper(grid, *segment.segments[3], i + m / 2, j, m / 2 + 2, m / 2, move);
@@ -336,23 +364,23 @@ void solveClosedTourHelper(Grid<int> &grid, Segment &segment, int i, int j, int 
          *  |           |             |
          *  |-----------|-------------|
          */
-        if (n == m and n % 4 == 2)
+        if (n == m and n mod 4 == 2)
         {
-            // first section
+            // first segment
             segment.segments[0] = new Segment(n / 2 - 1, n / 2 - 1, i, j);
             solveClosedTourHelper(grid, *segment.segments[0], i, j, n / 2 - 1, n / 2 - 1, move);
 
-            // second section
+            // second segment
             move += (n / 2 - 1) * (n / 2 - 1);
             segment.segments[1] = new Segment(n / 2 - 1, n / 2 + 1, i, j + n / 2 - 1);
             solveClosedTourHelper(grid, *segment.segments[1], i, j + n / 2 - 1, n / 2 - 1, n / 2 + 1, move);
 
-            // third section
+            // third segment
             move += (n / 2 - 1) * (n / 2 + 1);
             segment.segments[2] = new Segment(n / 2 + 1, n / 2 + 1, i + n / 2 - 1, j + n / 2 - 1);
             solveClosedTourHelper(grid, *segment.segments[2], i + n / 2 - 1, j + n / 2 - 1, n / 2 + 1, n / 2 + 1, move);
 
-            // fourth section
+            // fourth segment
             move += (n / 2 + 1) * (n / 2 + 1);
             segment.segments[3] = new Segment(n / 2 + 1, n / 2 - 1, i + n / 2 - 1, j);
             solveClosedTourHelper(grid, *segment.segments[3], i + n / 2 - 1, j, n / 2 + 1, n / 2 - 1, move);
@@ -374,25 +402,25 @@ void solveClosedTourHelper(Grid<int> &grid, Segment &segment, int i, int j, int 
          *  |           |             |
          *  |-----------|-------------|
          */
-        if ((n == m - 2 and n % 4 == 2) or (m == n - 2 and m % 4 == 2))
+        if ((n == m - 2 and n mod 4 == 2) or (m == n - 2 and m mod 4 == 2))
         {
             if (n == m - 2)
             {
-                // first section
+                // first segment
                 segment.segments[0] = new Segment(n / 2 - 1, n / 2 + 1, i, j);
                 solveClosedTourHelper(grid, *segment.segments[0], i, j, n / 2 - 1, n / 2 + 1, move);
 
-                // second section
+                // second segment
                 move += (n / 2 - 1) * (n / 2 + 1);
                 segment.segments[1] = new Segment(n / 2 - 1, n / 2 + 1, i, j + n / 2 + 1);
                 solveClosedTourHelper(grid, *segment.segments[1], i, j + n / 2 + 1, n / 2 - 1, n / 2 + 1, move);
 
-                // third section
+                // third segment
                 move += (n / 2 - 1) * (n / 2 + 1);
                 segment.segments[2] = new Segment(n / 2 + 1, n / 2 + 1, i + n / 2 - 1, j + n / 2 + 1);
                 solveClosedTourHelper(grid, *segment.segments[2], i + n / 2 - 1, j + n / 2 + 1, n / 2 + 1, n / 2 + 1, move);
 
-                // fourth section
+                // fourth segment
                 move += (n / 2 + 1) * (n / 2 + 1);
                 segment.segments[3] = new Segment(n / 2 + 1, n / 2 + 1, i + n / 2 - 1, j);
                 solveClosedTourHelper(grid, *segment.segments[3], i + n / 2 - 1, j, n / 2 + 1, n / 2 + 1, move);
@@ -400,21 +428,21 @@ void solveClosedTourHelper(Grid<int> &grid, Segment &segment, int i, int j, int 
 
             else
             {
-                // first section
+                // first segment
                 segment.segments[0] = new Segment(m / 2 + 1, m / 2 - 1, i, j);
                 solveClosedTourHelper(grid, *segment.segments[0], i, j, m / 2 + 1, m / 2 - 1, move);
 
-                // second section
+                // second segment
                 move += (m / 2 + 1) * (m / 2 - 1);
                 segment.segments[1] = new Segment(m / 2 + 1, m / 2 + 1, i, j + n / 2 - 1);
                 solveClosedTourHelper(grid, *segment.segments[1], i, j + m / 2 - 1, m / 2 + 1, m / 2 + 1, move);
 
-                // third section
+                // third segment
                 move += (m / 2 + 1) * (m / 2 + 1);
                 segment.segments[2] = new Segment(m / 2 + 1, m / 2 + 1, i + m / 2 + 1, j + n / 2 - 1);
                 solveClosedTourHelper(grid, *segment.segments[2], i + m / 2 + 1, j + m / 2 - 1, m / 2 + 1, m / 2 + 1, move);
 
-                // fourth section
+                // fourth segment
                 move += (m / 2 + 1) * (m / 2 + 1);
                 segment.segments[3] = new Segment(m / 2 + 1, m / 2 - 1, i + m / 2 + 1, j);
                 solveClosedTourHelper(grid, *segment.segments[3], i + m / 2 + 1, j, m / 2 + 1, m / 2 - 1, move);
@@ -430,21 +458,45 @@ void findPairsHelper(Grid<int> &grid, Segment &segment, int section, int i, int 
     int n = segment.segments[section]->n, m = segment.segments[section]->m;
     int k = segment.segments[section]->i, l = segment.segments[section]->j;
 
-    vector<int> delta_i = {1, 2,  2,  1, -1, -2, -2, -1};
-    vector<int> delta_j = {2, 1, -1, -2, -2, -1,  1,  2};
-
     for (int d = 0; d < 8; d++)
     {
-        if (isValid(n, m, i + delta_i[d], j + delta_j[d]))
-        //  and (
-        //     isValid(2, 2, i + delta_i[d] - (n - 4), j + delta_j[d] - (m - 2)) or 
-        //     isValid(2, 4, i + delta_i[d] - (n - 2), j + delta_j[d] - (m - 4))
-        // )
+        bool ok = isValid(n, m, i + delta_i[d], j + delta_j[d]);
+        switch (section)
+        {
+            case 0:
+            {
+                ok = ok and (isValid(2, 2, i + delta_i[d] - (n - 4), j + delta_j[d] - (m - 2)) or
+                             isValid(2, 4, i + delta_i[d] - (n - 2), j + delta_j[d] - (m - 4)));
+                break;
+            }
+            case 1:
+            {
+                ok = ok and (isValid(2, 2, i + delta_i[d] - (n - 4), j + delta_j[d]) or
+                             isValid(2, 4, i + delta_i[d] - (n - 2), j + delta_j[d]));
+                break;
+            }
+            case 2:
+            {
+                ok = ok and (isValid(2, 2, i + delta_i[d], j + delta_j[d]) or
+                             isValid(2, 4, i + delta_i[d], j + delta_j[d]));
+                break;
+            }
+            case 3:
+            {
+                ok = ok and (isValid(2, 2, i + delta_i[d], j + delta_j[d] - (m - 2)) or
+                             isValid(2, 4, i + delta_i[d], j + delta_j[d] - (m - 4)));
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
+        if (ok)
         {
             if (abs(grid[i + k][j + l] - grid[i + delta_i[d] + k][j + delta_j[d] + l]) == 1)
             {
                 segment.pairs[section][grid[i + k][j + l]].insert(grid[i + delta_i[d] + k][j + delta_j[d] + l]);
-                // segment.pairs[section][grid[i + delta_i[d] + k][j + delta_j[d] + l]].insert(grid[i + k][j + l]);
             }
         }
     }
@@ -453,7 +505,6 @@ void findPairsHelper(Grid<int> &grid, Segment &segment, int section, int i, int 
 void findPairs(Grid<int> &grid, Segment &segment, int section)
 {
     int n = segment.segments[section]->n, m = segment.segments[section]->m;
-    // int k = segment.segments[section]->i, l = segment.segments[section]->j;
 
     switch (section)
     {
@@ -544,6 +595,300 @@ void findPairs(Grid<int> &grid, Segment &segment, int section)
     }
 }
 
+vector<int> findPath(Grid<int> &grid, Segment &segment)
+{
+    /*
+     * Iterate over all starting locations for the search. We always start the
+     * search from the entry point, and push the exit point into the stack
+     * to then continue the search at the next segment
+     */
+    unordered_map<int, bool> visited;
+    for (auto &[x, y] : segment.pairs[0])
+    {
+        int entrance = x;
+        int currSegment = 1;
+
+        stack<vector<int>> s;
+        vector<int> path;
+        path.push_back(entrance);
+
+        /*
+         * Maximum of 2 values in the set of consecutive vertices confined to 
+         * the region that allows for a knight's tour to be completed and a
+         * transition to the next segment
+         */
+
+        for (auto it = segment.pairs[0][entrance].begin(); it != segment.pairs[0][entrance].end(); it++)
+        {
+            path.push_back(*it);
+            s.push(path);
+
+            /*
+             * Slightly modified BFS algorithm: in this version, we force 
+             * moving to the next segment since the path has to be
+             * of length 4, with two vertices in each segment
+             */
+            while (not s.empty())
+            {
+                /*
+                 * Even if we push back multiple neighbors, make sure we only
+                 * increment the segment mod 4 once for all neighbors of a
+                 * segment
+                 */
+                bool addOne = true;
+
+                path = s.top();
+                s.pop();
+                int v = path[path.size() - 1];
+
+                bool ok = false;
+
+                switch (currSegment)
+                {
+                    // Exit point from segment 1 to 2 has already been pushed
+                    case 1:
+                    {
+                        /*
+                         * From segment 1 to segment 2, the deltas we have to
+                         * check are (1, 2), (2, 1), (-1, 2), (-2, 1)
+                         * 
+                         * This corresponds to deltas 0, 1, 6, and 7 in the
+                         * delta_i and delta_j tables
+                         */
+                        
+                        vector<int> idxs = {0, 1, 6, 7};
+                        vector<int> currLoc = grid(v);
+
+                        for (int i = 0; i < 4; i++)
+                        {
+                            vector<int> nextLoc = {currLoc[0] + delta_i[idxs[i]], currLoc[1] + delta_j[idxs[i]]};
+
+                            if (isValid(grid.getRows(), grid.getCols(), nextLoc[0], nextLoc[1]))
+                            {
+                                if (segment.pairs[currSegment].count(grid[nextLoc[0]][nextLoc[1]]))
+                                {
+                                    ok = true;
+
+                                    for (auto itt = segment.pairs[currSegment][grid[nextLoc[0]][nextLoc[1]]].begin();
+                                              itt != segment.pairs[currSegment][grid[nextLoc[0]][nextLoc[1]]].end();
+                                              itt++)
+                                    {
+                                        vector<int> newPath(path);
+                                        newPath.push_back(grid[nextLoc[0]][nextLoc[1]]);
+                                        newPath.push_back(*itt);
+
+                                        s.push(newPath);
+                                    }
+
+                                    if (addOne)
+                                    {
+                                        currSegment++;
+                                        currSegment = currSegment mod 4;
+
+                                        addOne = false;
+                                    }
+                                }
+                            }
+                        }
+
+                        break;
+                    }
+
+                    // Exit point from segment 2 to 3 has already been pushed
+                    case 2:
+                    {
+                        /*
+                         * From segment 2 to segment 3, the deltas we have to
+                         * check are (1, 2), (2, 1), (2, -1), (1, -2)
+                         * 
+                         * This corresponds to deltas 0, 1, 2, and 3 in the
+                         * delta_i and delta_j tables
+                         */
+                        
+                        vector<int> currLoc = grid(v);
+
+                        for (int i = 0; i < 4; i++)
+                        {
+                            vector<int> nextLoc = {currLoc[0] + delta_i[i], currLoc[1] + delta_j[i]};
+
+                            if (isValid(grid.getRows(), grid.getCols(), nextLoc[0], nextLoc[1]))
+                            {
+                                if (segment.pairs[currSegment].count(grid[nextLoc[0]][nextLoc[1]]))
+                                {
+                                    ok = true;
+                                    
+                                    for (auto itt = segment.pairs[currSegment][grid[nextLoc[0]][nextLoc[1]]].begin();
+                                              itt != segment.pairs[currSegment][grid[nextLoc[0]][nextLoc[1]]].end();
+                                              itt++)
+                                    {
+                                        vector<int> newPath(path);
+                                        newPath.push_back(grid[nextLoc[0]][nextLoc[1]]);
+                                        newPath.push_back(*itt);
+
+                                        s.push(newPath);
+                                    }
+
+                                    if (addOne)
+                                    {
+                                        currSegment++;
+                                        currSegment = currSegment mod 4;
+
+                                        addOne = false;
+                                    }
+                                }
+                            }
+                        }
+
+                        break;
+                    }
+
+                    // Exit point from segment 3 to 4 has already been pushed
+                    case 3:
+                    {
+                        /*
+                         * From segment 3 to segment 4, the deltas we have to
+                         * check are (2, -1), (1, -2), (-1, -2), (-2, -1)
+                         * 
+                         * This corresponds to deltas 2, 3, 4, and 5 in the
+                         * delta_i and delta_j tables
+                         */
+                        
+                        vector<int> currLoc = grid(v);
+
+                        for (int i = 2; i < 6; i++)
+                        {
+                            vector<int> nextLoc = {currLoc[0] + delta_i[i], currLoc[1] + delta_j[i]};
+
+                            if (isValid(grid.getRows(), grid.getCols(), nextLoc[0], nextLoc[1]))
+                            {
+                                if (segment.pairs[currSegment].count(grid[nextLoc[0]][nextLoc[1]]))
+                                {
+                                    ok = true;
+                                    
+                                    for (auto itt = segment.pairs[currSegment][grid[nextLoc[0]][nextLoc[1]]].begin();
+                                              itt != segment.pairs[currSegment][grid[nextLoc[0]][nextLoc[1]]].end();
+                                              itt++)
+                                    {
+                                        vector<int> newPath(path);
+                                        newPath.push_back(grid[nextLoc[0]][nextLoc[1]]);
+                                        newPath.push_back(*itt);
+
+                                        s.push(newPath);
+                                    }
+
+                                    if (addOne)
+                                    {
+                                        currSegment++;
+                                        currSegment = currSegment mod 4;
+
+                                        addOne = false;
+                                    }
+                                }
+                            }
+                        }
+
+                        break;
+                    }
+
+                    // Exit point from segment 4 to 1 has already been pushed
+                    case 0:
+                    {
+                        /*
+                         * From segment 4 to segment 1, the deltas we have to
+                         * check are (-1, -2), (-2, -1), (-2, 1), (-1, 2)
+                         * 
+                         * This corresponds to deltas 4, 5, 6, and 7 in the
+                         * delta_i and delta_j tables
+                         */
+                        
+                        vector<int> currLoc = grid(v);
+
+                        for (int i = 4; i < 8; i++)
+                        {
+                            vector<int> nextLoc = {currLoc[0] + delta_i[i], currLoc[1] + delta_j[i]};
+
+                            if (isValid(grid.getRows(), grid.getCols(), nextLoc[0], nextLoc[1]))
+                            {
+                                if (grid[nextLoc[0]][nextLoc[1]] == entrance)
+                                {
+                                    ok = true;
+                                    path.push_back(entrance);
+                                    return path;
+                                }
+                            }
+                        }
+
+                        break;
+                    }
+
+                    default:
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    return {};
+}
+
+void traverseSegments(Grid<int> &grid, Segment &segment, const vector<int> &path)
+{
+    Grid<int> copy = grid;
+
+    for (int currSegment = 0; currSegment < 4; currSegment++)
+    {
+        int n = segment.segments[currSegment]->n;
+        int m = segment.segments[currSegment]->m;
+        int i = segment.segments[currSegment]->i;
+        int j = segment.segments[currSegment]->j;
+
+        int a = 1e9;
+        for (int k = 0; k < n; k++)
+        {
+            for (int l = 0; l < m; l++)
+            {
+                a = min(a, grid[i + k][j + l]);
+            }
+        }
+        int start = path[currSegment * 2] - a;
+        int count = 0;
+        int k = start;
+
+        bool rev = segment.segments[currSegment]->reversed;
+
+        if (not rev)
+        {
+            do
+            {
+                int num = (a + count++);
+
+                vector<int> loc = grid(k + a);
+                copy[loc[0]][loc[1]] = num;
+                copy(num) = loc;
+                k = ((k + 1) % (n * m));
+
+            } while (k != start);
+        }
+        else
+        {
+            do
+            {
+                int num = (a + count++);
+
+                vector<int> loc = grid(k + a);
+                copy[loc[0]][loc[1]] = num;
+                copy(num) = loc;
+                k = ((k - 1) mod (n * m));
+
+            } while (k != ((start) mod (n * m)));
+        }
+    }
+
+    grid = copy;
+}
+
 void solveClosedTourMerge(Grid<int> &grid, Segment &segment)
 {
     /*
@@ -559,10 +904,19 @@ void solveClosedTourMerge(Grid<int> &grid, Segment &segment)
         findPairs(grid, segment, i);
     }
 
-    vector<int> delta_i = {1, 2,  2,  1, -1, -2, -2, -1};
-    vector<int> delta_j = {2, 1, -1, -2, -2, -1,  1,  2};
+    // Find a path that connects 4 segments together
+    vector<int> path = findPath(grid, segment);
 
-    // Search for a path from segment 0->1->2->3->0 via pairs found
+    // Indicate which segments need to be completed in reverse order
+    for (int i = 0; i < path.size() - 2; i += 2)
+    {
+        if (path[i] < path[i + 1])
+        {
+            segment.segments[i / 2]->reversed = true;
+        }
+    }
+
+    traverseSegments(grid, segment, path);
 }
 
 void solveClosedTour(Grid<int> &grid)
@@ -570,5 +924,4 @@ void solveClosedTour(Grid<int> &grid)
     Segment segment(grid.getRows(), grid.getCols(), 0, 0);
 
     solveClosedTourHelper(grid, segment, 0, 0, grid.getRows(), grid.getCols(), 0);
-    // grid.print();
 }

@@ -22,7 +22,7 @@ public:
         const sf::Vector2f &p1, 
         const sf::Vector2f &p2, 
         sf::Color c=BLACK,
-        float t=0.01
+        float t=0.02
     )
     {
         color = c;

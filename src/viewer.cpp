@@ -64,8 +64,9 @@ void Viewer::render()
 {
     window->clear(WHITE);
     drawGrid();
-    // drawPath();
+    drawPath();
     drawNums();
+
     window->display();
 }
 
@@ -94,98 +95,60 @@ void Viewer::drawGrid()
 void Viewer::drawPath()
 {
     // Draw the path connecting the edges sequentially
-    int i = 0, j = 0;
-    sf::Vector2f v(squareSize / 2, squareSize / 2);
-
-    vector<int> delta_i = {1, 2,  2,  1, -1, -2, -2, -1};
-    vector<int> delta_j = {2, 1, -1, -2, -2, -1,  1,  2};
+    int i = grid(0)[0], j = grid(0)[1];
+    sf::Vector2f v(
+        j * squareSize + squareSize / 2, 
+        i * squareSize + squareSize / 2
+    );
 
     for (int s = 0; s < grid.getRows() * grid.getCols(); s++)
     {
-        bool a = true;
+        i = grid((s + 1) % (grid.getRows() * grid.getCols()))[0];
+        j = grid((s + 1) % (grid.getRows() * grid.getCols()))[1];
 
-        // Find next [i, j] in the path
-        for (int k = 0; k < 8 and a; k++)
-        {
-            if (isValid(grid.getRows(), grid.getCols(), i + delta_i[k], j + delta_j[k]))
-            {
-                if (grid[i + delta_i[k]][j + delta_j[k]] == (s + 1) % (grid.getRows() * grid.getCols()))
-                {
-                    i += delta_i[k];
-                    j += delta_j[k];
+        sf::Vector2f u(
+            j * squareSize + squareSize / 2,
+            i * squareSize + squareSize / 2
+        );
 
+        LineShape line_f(v, u, GREEN);
+        LineShape line_r(u, v, GREEN);
 
-                    sf::Vector2f u(
-                        j * squareSize + squareSize / 2,
-                        i * squareSize + squareSize / 2
-                    );
+        line_f.draw(window);
+        line_r.draw(window);
 
-                    LineShape line_f(v, u, GREEN);
-                    LineShape line_r(u, v, GREEN);
-
-                    line_f.draw(window);
-                    line_r.draw(window);
-
-                    v = u;
-                    a = false;
-                }
-
-                else if (k == 7)
-                {
-                    s++;
-                    bool b = true;
-
-                    for (int y = 0; y < grid.getRows() and b; y++)
-                    {
-                        for (int x = 0; x < grid.getCols() and b; x++)
-                        {
-                            if (grid[y][x] == s)
-                            {
-                                i = y;
-                                j = x;
-                                v = sf::Vector2f(j * squareSize + squareSize / 2, i * squareSize + squareSize / 2);
-
-                                b = false;
-                            }
-                        }
-                    }
-
-                    a = false;
-                    s--;
-                }
-            }
-        }
+        v = u;
     }
 }
 
 void Viewer::drawNums()
 {
     // Draw the order to take, i.e. which edge is visited sequentially
-    for (int i = 0; i < grid.getRows(); i++)
+    for (int k = 0; k < grid.getRows() * grid.getCols(); k++)
     {
-        for (int j = 0; j < grid.getCols(); j++)
-        {
-            sf::Text num;
-            
-            num.setFont(font);
-            num.setFillColor(grid[i][j] == 0 ? RED : BLACK);
-            num.setCharacterSize(min(100, squareSize / 4));
-            num.setString(to_string(grid[i][j]));
+        int i = grid(k)[0];
+        int j = grid(k)[1];
 
-            num.setPosition((float)(squareSize * j), (float)(squareSize * i));
+        sf::Text num;
+        
+        num.setFont(font);
+        num.setFillColor(grid[i][j] == 0 ? RED : BLACK);
+        num.setCharacterSize(min(100, squareSize / 4));
+        num.setString(to_string(grid[i][j]));
 
-            window->draw(num);
+        num.setPosition((float)(squareSize * j), (float)(squareSize * i));
 
-            sf::CircleShape dot;
-            dot.setRadius(squareSize / 16);
-            dot.setFillColor(RED);
+        window->draw(num);
 
-            dot.setPosition(
-                (float)(squareSize * j + (squareSize / 2 - dot.getRadius())), 
-                (float)(squareSize * i + (squareSize / 2 - dot.getRadius()))
-            );
+        sf::CircleShape dot;
+        dot.setRadius(squareSize / 16);
+        dot.setFillColor(RED);
 
-            window->draw(dot);
-        }
+        dot.setPosition(
+            (float)(squareSize * j + (squareSize / 2 - dot.getRadius())), 
+            (float)(squareSize * i + (squareSize / 2 - dot.getRadius()))
+        );
+
+        window->draw(dot);
     }
 }

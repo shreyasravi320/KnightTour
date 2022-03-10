@@ -6,6 +6,7 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <stack>
+#include <queue>
 
 #define UNVISITED -1
 #define PairMap vector<unordered_map<int, unordered_set<int>>>
@@ -21,6 +22,9 @@ extern Grid<int> SOLUTION_8x8;
 extern Grid<int> SOLUTION_8x10;
 extern Grid<int> SOLUTION_10x10;
 extern Grid<int> SOLUTION_10x12;
+
+extern vector<int> delta_i;
+extern vector<int> delta_j;
 
 /*
  * Segment struct
@@ -83,53 +87,79 @@ struct Segment
 
 /*
  * isValid
- * Purpose: check if a cell [i, j] is contained within the board
+ * Purpose:    check if a cell [i, j] is contained within the board
  * Parameters: dimensions of the board, index pair i, j
- * Returns: true if [i, j] is within the board, false otherwise
+ * Returns:    true if [i, j] is within the board, false otherwise
  */
 bool isValid(int n, int m, int i, int j);
 
 /*
  * populateSolutions
- * Purpose: populate the necessary base cases with hard-coded solutions
+ * Purpose:    populate the necessary base cases with hard-coded solutions
  * Parameters: None
- * Returns: None
+ * Returns:    None
  */
 void populateSolutions();
 
 /*
  * solveClosedTourHelper
- * Purpose: solve knight's tour sub-problems for sections of any board
+ * Purpose:    solve knight's tour sub-problems for sections of any board
  * Parameters: board, segment, start indices, size of the board
- * Returns: None
+ * Returns:    None
  */
 void solveClosedTourHelper(Grid<int> &grid, Segment &segment, int i, int j, int n, int m, int move);
 
+/*
+ * findPairsHelper
+ * Purpose:    Helper function to find consecutive vertices given a location [i, j] 
+ * Parameters: board to search on, segments to search on, section of the 
+ *             board to iterate over, starting location [i, j]
+ * Returns:    None
+ */
 void findPairsHelper(Grid<int> &grid, Segment &segment, int section, int i, int j);
 
 /*
  * findPairs
- * Purpose: Search for pairs of indices that we can modify to create a 
- *          closed path between different segments
+ * Purpose:    Search for pairs of indices that we can modify to create a 
+ *             closed path between different segments
  * Parameters: board to search on, segments to search on, section of the 
  *             board to iterate over
- * Returns: None
+ * Returns:    None
  */
 void findPairs(Grid<int> &grid, Segment &segment, int section);
 
 /*
+ * findPath
+ * Purpose:    Modified iterative DFS algorithm that finds a path connecting 4
+ *             segments of the board
+ * Parameters: board to search on, segments to search on
+ * Returns:    a vector of the vertices to connect
+ */
+vector<int> findPath(Grid<int> &grid, Segment &segment);
+
+/*
+ * traverseSegments
+ * Purpose:    Traverse over all segments in order and join them via the found
+ *             path
+ * Parameters: board to traverse on, segments to traverse on, path of vertices 
+ *             to follow to connect the segments
+ * Returns:    None
+ */
+void traverseSegments(Grid<int> &grid, Segment &segment, const vector<int> &path);
+
+/*
  * solveClosedTourMerge
- * Purpose: merge solved knight's tour sections for the entire board
+ * Purpose:    merge solved knight's tour sections for the entire board
  * Parameters: board divided into subsections
- * Returns: None
+ * Returns:    None
  */
 void solveClosedTourMerge(Grid<int> &grid, Segment &segment);
 
 /*
  * solveClosedTour
- * Purpose: solve the knight's tour problem for a n by n board
+ * Purpose:    solve the knight's tour problem for a n by n board
  * Parameters: a grid representing the board to solve
- * Returns: None
+ * Returns:    None
  */
 void solveClosedTour(Grid<int> &grid);
 
