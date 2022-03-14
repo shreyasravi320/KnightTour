@@ -7,11 +7,13 @@ The Knight's tour problem questions whether or not a knight can start at any
 square on a $n \times n$ chessboard, touch every square exactly once, and return to 
 the initial position.
 
-<img src="imgs/6x6.png" alt="6x6 Knight's tour" width="200"/>
-<img src="imgs/8x8.png" alt="8x8 Knight's tour" width="200"/>
-<img src="imgs/10x10.png" alt="10x10 Knight's tour" width="200"/>
-<img src="imgs/12x12.png" alt="12x12 Knight's tour" width="200"/>
-<img src="imgs/14x14.png" alt="14x14 Knight's tour" width="200"/>
+<p float="left">
+    <img src="imgs/6x6.png" alt="6x6 Knight's tour" width="200"/>
+    <img src="imgs/8x8.png" alt="8x8 Knight's tour" width="200"/>
+    <img src="imgs/10x10.png" alt="10x10 Knight's tour" width="200"/>
+    <img src="imgs/12x12.png" alt="12x12 Knight's tour" width="200"/>
+    <img src="imgs/14x14.png" alt="14x14 Knight's tour" width="200"/>
+</p>
 
 ## Implementation
 
