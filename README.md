@@ -4,7 +4,7 @@ My implementation of a divide-conquer style algorithm that solves the Knight's
 tour problem for square boards of even side length.
 
 The Knight's tour problem questions whether or not a knight can start at any 
-square on a $n \times n$ chessboard, touch every square exactly once, and return to 
+square on a n x n chessboard, touch every square exactly once, and return to 
 the initial position.
 
 <p float="left">
@@ -21,31 +21,31 @@ the initial position.
 The algorithm divides the board into 4 equal or close to equal sections, until
 a size small enough to compute the knight's tour in constant time is reached.
 In particular, we divide the board until the divided segment size is of size
-$6 \times 6$, $6 \times 8$, $8 \times 8$, $8 \times 10$, $10 \times 10$, or 
-$10 \times 12$. The knight's tour is then computed on each of these divided 
-segments in constant time. We perform a search on 4 connected segments to find
-a path between the first segment to the second, third, fourth, and back to the
-first segment to then connect the 4 segments together. We keep connecting 
-segments like this until the initial board state has a completed knight's tour.
+6 x 6, 6 x 8, 8 x 8, 8 x 10, 10 x 10, or 10 x 12. The knight's tour is then 
+computed on each of these divided segments in constant time. We perform a 
+search on 4 connected segments to find a path between the first segment to the 
+second, third, fourth, and back to the first segment to then connect the 4 
+segments together. We keep connecting segments like this until the initial 
+board state has a completed knight's tour.
 
 ### Justification
-The algorithm relies on the fact that any $n \times n$ board can be formed by
-some combination of $6 \times 6$, $6 \times 8$, $8 \times 8$, $8 \times 10$, 
-$10 \times 10$, or $10 \times 12$ boards. A proof is presented 
-[here](KnightTour.pdf). Once each of the base case segments contain a completed 
-knight's tour, we select certain vertices along the path to join each segment 
-together in clockwise fashion, yielding a larger completed knight's tour. As we 
-recurse and keep merging upwards, we simply connect larger and larger knight's 
-tours together using the same search process between the 4 segments.
+The algorithm relies on the fact that any n x n board can be formed by
+some combination of 6 x 6, 6 x 8, 8 x 8, 8 x 10, 10 x 10, or 10 x 12 boards. 
+A proof is presented [here](KnightTour.pdf). Once each of the base case 
+segments contain a completed knight's tour, we select certain vertices along 
+the path to join each segment together in clockwise fashion, yielding a larger 
+completed knight's tour. As we recurse and keep merging upwards, we simply 
+connect larger and larger knight's tours together using the same search process 
+between the 4 segments.
 
 ### Time and Space
-Let $k$ be the number of squares on the board, i.e. $k = n \times n$. We divide 
+Let k be the number of squares on the board, i.e. k = n x n. We divide 
 the board into 4 sections on each recursive call. On each step of the
-recursion, we compute $\Theta(k)$ work to perform the search between different 
+recursion, we compute O(k) work to perform the search between different 
 segments and reconnect the edges to form a complete path. The recurrence 
 equation for our algorithm is then
-$T(k) = 4T(\frac{k}{4}) + \Theta(k)$
-which can be evaluated to $\Theta(k \log k)$ by the master method.
+T(k) = 4T(k / 4) + O(k)
+which can be evaluated to O(k log k) by the master method.
 
 ## Data Structures
 
