@@ -111,8 +111,8 @@ void Viewer::drawPath()
             i * squareSize + squareSize / 2
         );
 
-        LineShape line_f(v, u, GREEN);
-        LineShape line_r(u, v, GREEN);
+        LineShape line_f(v, u, BLACK);
+        LineShape line_r(u, v, BLACK);
 
         line_f.draw(window);
         line_r.draw(window);
@@ -132,7 +132,7 @@ void Viewer::drawNums()
         sf::Text num;
         
         num.setFont(font);
-        num.setFillColor(grid[i][j] == 0 ? RED : BLACK);
+        num.setFillColor(grid[i][j] == 0 ? RED : BLUE);
         num.setCharacterSize(min(100, squareSize / 4));
         num.setString(to_string(grid[i][j]));
 
@@ -142,7 +142,7 @@ void Viewer::drawNums()
 
         sf::CircleShape dot;
         dot.setRadius(squareSize / 16);
-        dot.setFillColor(RED);
+        dot.setFillColor(PINK);
 
         dot.setPosition(
             (float)(squareSize * j + (squareSize / 2 - dot.getRadius())), 

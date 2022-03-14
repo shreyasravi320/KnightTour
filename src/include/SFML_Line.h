@@ -13,6 +13,7 @@
 #define BLACK sf::Color(0, 0, 0)
 #define BLUE sf::Color(50, 50, 205)
 #define RED sf::Color(205, 50, 50)
+#define PINK sf::Color(228, 35, 157)
 #define GREEN sf::Color(50, 205, 50)
 
 class LineShape
