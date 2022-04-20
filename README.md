@@ -41,11 +41,11 @@ between the 4 segments.
 ### Time and Space
 Let k be the number of squares on the board, i.e. k = n x n. We divide 
 the board into 4 sections on each recursive call. On each step of the
-recursion, we compute O(k) work to perform the search between different 
+recursion, we compute O(1) work to perform the search between different 
 segments and reconnect the edges to form a complete path. The recurrence 
 equation for our algorithm is then
-T(k) = 4T(k / 4) + O(k)
-which can be evaluated to O(k log k) by the master method.
+T(k) = 4T(k / 4) + O(1)
+which can be evaluated to O(k) by the master method.
 
 ## Data Structures
 
