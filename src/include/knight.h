@@ -9,7 +9,7 @@
 #include <queue>
 
 #define UNVISITED -1
-#define PairMap vector<unordered_map<int, unordered_set<int>>>
+#define PairMap vector<unordered_map<int, int>>
 
 /*
  * Necessary base cases
@@ -45,7 +45,7 @@ struct Segment
 
     Segment()
     {
-        segments = vector<Segment *>();
+        segments = vector<Segment *>(4);
         pairs = PairMap();
     }
 
@@ -56,7 +56,7 @@ struct Segment
         i = _i;
         j = _j;
 
-        segments = vector<Segment *>();
+        segments = vector<Segment *>(4);
         pairs = PairMap();
     }
 
@@ -111,8 +111,8 @@ void solveClosedTourHelper(Grid<int> &grid, Segment &segment, int i, int j, int 
 
 /*
  * findPairsHelper
- * Purpose:    Helper function to find consecutive vertices given a location [i, j] 
- * Parameters: board to search on, segments to search on, section of the 
+ * Purpose:    Helper function to find consecutive vertices given a location [i, j]
+ * Parameters: board to search on, segments to search on, section of the
  *             board to iterate over, starting location [i, j]
  * Returns:    None
  */
@@ -120,13 +120,16 @@ void findPairsHelper(Grid<int> &grid, Segment &segment, int section, int i, int 
 
 /*
  * findPairs
- * Purpose:    Search for pairs of indices that we can modify to create a 
+ * Purpose:    Search for pairs of indices that we can modify to create a
  *             closed path between different segments
- * Parameters: board to search on, segments to search on, section of the 
+ * Parameters: board to search on, segments to search on, section of the
  *             board to iterate over
  * Returns:    None
  */
 void findPairs(Grid<int> &grid, Segment &segment, int section);
+
+vector<int> intersection(const vector<int> &v1, const vector<int> &v2);
+vector<int> getNeighbors(Grid<int> &grid, int i, int j);
 
 /*
  * findPath
@@ -141,7 +144,7 @@ vector<int> findPath(Grid<int> &grid, Segment &segment);
  * traverseSegments
  * Purpose:    Traverse over all segments in order and join them via the found
  *             path
- * Parameters: board to traverse on, segments to traverse on, path of vertices 
+ * Parameters: board to traverse on, segments to traverse on, path of vertices
  *             to follow to connect the segments
  * Returns:    None
  */

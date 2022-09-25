@@ -1,12 +1,20 @@
-#include "viewer.h"
+#include "include/viewer.h"
 
 int main(int argc, char **argv)
 {
     populateSolutions();
 
     int n;
-    cout << "Enter the side length of the board: ";
-    cin >> n;
+
+    if (argc < 2)
+    {
+        cout << "Enter the side length of the board: ";
+        cin >> n;
+    }
+    else
+    {
+        n = stoi(argv[1]);
+    }
 
     if (n % 2)
     {

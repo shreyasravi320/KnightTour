@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <array>
 #include <unordered_map>
 
 using namespace std;
@@ -23,19 +24,23 @@ public:
     int getRows() const;
     int getCols() const;
 
+    void clearCells();
+    void assign(int i, int j, int v);
+
     Grid<T> &operator=(const vector<vector<T>> &rhs);
     vector<T> &operator[](int i);
-    vector<int> &operator()(int i);
-    
+    array<int, 2> &operator()(int i);
+
 private:
     vector<vector<T>> grid;
-    unordered_map<T, vector<int>> cells;
+    unordered_map<T, array<int, 2>> cells;
 };
 
 template <typename T>
 Grid<T>::Grid()
 {
-
+    grid = vector<vector<T>>();
+    cells = unordered_map<T, array<int, 2>>();
 }
 
 template <typename T>
@@ -104,15 +109,25 @@ int Grid<T>::getCols() const
 }
 
 template <typename T>
+void Grid<T>::clearCells()
+{
+    cells.clear();
+}
+
+template <typename T>
 void Grid<T>::print(ostream &out)
 {
     for (int i = 0; i < getRows(); i++)
     {
         for (int j = 0; j < getCols(); j++)
         {
-            out << grid[i][j] << "\t";
-        }
+            out << grid[i][j] << ",\t";
 
+            if (getRows() >= 10 and grid[i][j] < 100)
+            {
+                out << "\t";
+            }
+        }
         out << "\n";
     }
 
@@ -125,13 +140,19 @@ void Grid<T>::print(ostream &out)
 }
 
 template <typename T>
+void Grid<T>::assign(int i, int j, int v)
+{
+    cells[v] = {i, j};
+}
+
+template <typename T>
 vector<T> &Grid<T>::operator[](int i)
 {
     return grid[i];
 }
 
 template <typename T>
-vector<int> &Grid<T>::operator()(int i)
+array<int, 2> &Grid<T>::operator()(int i)
 {
     return cells[i];
 }

@@ -26,6 +26,7 @@ Viewer::~Viewer()
 void Viewer::init()
 {
     window = new sf::RenderWindow(sf::VideoMode(WIDTH, HEIGHT), "KnightTour", sf::Style::Titlebar | sf::Style::Close);
+    window->setPosition({ 1920 / 2 - WIDTH / 2, 0 });
     font.loadFromFile("CourierPrime-Bold.ttf");
     window->setFramerateLimit(144);
 }
@@ -75,13 +76,13 @@ void Viewer::drawGrid()
     // Draw horizontal and vertical lines to make a visual grid
     for (int i = 0; i < grid.getRows(); i++)
     {
-        sf::Vertex line_h[] = 
+        sf::Vertex line_h[] =
         {
             sf::Vertex(sf::Vector2f(0, i * squareSize), BLACK),
             sf::Vertex(sf::Vector2f(WIDTH, i * squareSize), BLACK)
         };
 
-        sf::Vertex line_v[] = 
+        sf::Vertex line_v[] =
         {
             sf::Vertex(sf::Vector2f(i * squareSize, 0), BLACK),
             sf::Vertex(sf::Vector2f(i * squareSize, HEIGHT), BLACK)
@@ -97,7 +98,7 @@ void Viewer::drawPath()
     // Draw the path connecting the edges sequentially
     int i = grid(0)[0], j = grid(0)[1];
     sf::Vector2f v(
-        j * squareSize + squareSize / 2, 
+        j * squareSize + squareSize / 2,
         i * squareSize + squareSize / 2
     );
 
@@ -130,7 +131,7 @@ void Viewer::drawNums()
         int j = grid(k)[1];
 
         sf::Text num;
-        
+
         num.setFont(font);
         num.setFillColor(grid[i][j] == 0 ? RED : BLUE);
         num.setCharacterSize(min(100, squareSize / 4));
@@ -145,7 +146,7 @@ void Viewer::drawNums()
         dot.setFillColor(PINK);
 
         dot.setPosition(
-            (float)(squareSize * j + (squareSize / 2 - dot.getRadius())), 
+            (float)(squareSize * j + (squareSize / 2 - dot.getRadius())),
             (float)(squareSize * i + (squareSize / 2 - dot.getRadius()))
         );
 
