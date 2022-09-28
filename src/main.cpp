@@ -30,11 +30,11 @@ int main(int argc, char **argv)
 
     Viewer viewer = Viewer(n);
 
-    while (viewer.getWindowIsOpen())
-    {
-        viewer.update();
-        viewer.render();
-    }
+    // while (viewer.getWindowIsOpen())
+    // {
+    //     viewer.update();
+    //     viewer.render();
+    // }
 
     return 0;
 }

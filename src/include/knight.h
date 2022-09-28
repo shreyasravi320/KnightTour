@@ -38,15 +38,13 @@ struct Segment
     int i;
     int j;
 
-    bool reversed = false;
+    bool rev = false;
 
     vector<Segment *> segments;
     PairMap pairs;
 
     Segment()
     {
-        segments = vector<Segment *>(4);
-        pairs = PairMap();
     }
 
     Segment(int _n, int _m, int _i, int _j)
@@ -55,17 +53,24 @@ struct Segment
         m = _m;
         i = _i;
         j = _j;
+    }
 
-        segments = vector<Segment *>(4);
-        pairs = PairMap();
+    void deleteHelper(Segment *root)
+    {
+        if (root->segments.size() == 0)
+        {
+           delete root;
+        }
+
+        for (int i = 0; i < root->segments.size(); i++)
+        {
+            deleteHelper(root->segments[i]);
+        }
     }
 
     ~Segment()
     {
-        for (int i = 0; i < segments.size(); i++)
-        {
-            delete segments[i];
-        }
+        deleteHelper(this);
     }
 
     void print()
@@ -107,16 +112,7 @@ void populateSolutions();
  * Parameters: board, segment, start indices, size of the board
  * Returns:    None
  */
-void solveClosedTourHelper(Grid<int> &grid, Segment &segment, int i, int j, int n, int m, int move);
-
-/*
- * findPairsHelper
- * Purpose:    Helper function to find consecutive vertices given a location [i, j]
- * Parameters: board to search on, segments to search on, section of the
- *             board to iterate over, starting location [i, j]
- * Returns:    None
- */
-void findPairsHelper(Grid<int> &grid, Segment &segment, int section, int i, int j);
+void solveClosedTourHelper(Grid<int> &grid, Segment *segment, int i, int j, int n, int m, int move);
 
 /*
  * findPairs
@@ -126,7 +122,7 @@ void findPairsHelper(Grid<int> &grid, Segment &segment, int section, int i, int 
  *             board to iterate over
  * Returns:    None
  */
-void findPairs(Grid<int> &grid, Segment &segment, int section);
+void findPairs(Grid<int> &grid, Segment *segment, int section);
 
 vector<int> intersection(const vector<int> &v1, const vector<int> &v2);
 vector<int> getNeighbors(Grid<int> &grid, int i, int j);
@@ -138,7 +134,7 @@ vector<int> getNeighbors(Grid<int> &grid, int i, int j);
  * Parameters: board to search on, segments to search on
  * Returns:    a vector of the vertices to connect
  */
-vector<int> findPath(Grid<int> &grid, Segment &segment);
+vector<int> findPath(Grid<int> &grid, Segment *segment);
 
 /*
  * traverseSegments
@@ -148,7 +144,7 @@ vector<int> findPath(Grid<int> &grid, Segment &segment);
  *             to follow to connect the segments
  * Returns:    None
  */
-void traverseSegments(Grid<int> &grid, Segment &segment, const vector<int> &path);
+void traverseSegments(Grid<int> &grid, Segment *segment, const vector<int> &path);
 
 /*
  * solveClosedTourMerge
@@ -156,7 +152,7 @@ void traverseSegments(Grid<int> &grid, Segment &segment, const vector<int> &path
  * Parameters: board divided into subsections
  * Returns:    None
  */
-void solveClosedTourMerge(Grid<int> &grid, Segment &segment);
+void solveClosedTourMerge(Grid<int> &grid, Segment *segment);
 
 /*
  * solveClosedTour

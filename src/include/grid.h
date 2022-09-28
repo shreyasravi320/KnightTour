@@ -18,16 +18,15 @@ public:
     Grid(int n, int m, T val);
     ~Grid();
     Grid(vector<vector<T>> &rhs);
+    Grid(const Grid<T> &rhs);
 
     void print(ostream &out=cout);
 
     int getRows() const;
     int getCols() const;
 
-    void clearCells();
-    void assign(int i, int j, int v);
-
     Grid<T> &operator=(const vector<vector<T>> &rhs);
+    Grid<T> &operator=(const Grid<T> &rhs);
     vector<T> &operator[](int i);
     array<int, 2> &operator()(int i);
 
@@ -61,17 +60,46 @@ Grid<T>::~Grid()
 template <typename T>
 Grid<T>::Grid(vector<vector<T>> &rhs)
 {
-    if (grid != rhs)
+    grid = vector<vector<T>>(rhs.size());
+    for (int i = 0; i < rhs.size(); i++)
     {
-        grid = rhs;
-        cells.clear();
-
-        for (int i = 0; i < rhs.size(); i++)
+        vector<T> v(rhs[0].size());
+        for (int j = 0; j < rhs[0].size(); j++)
         {
-            for (int j = 0; j < rhs[0].size(); j++)
-            {
-                cells[grid[i][j]] = {i, j};
-            }
+            grid[i][j] = rhs[i][j];
+        }
+    }
+    cells.clear();
+
+    for (int i = 0; i < rhs.size(); i++)
+    {
+        for (int j = 0; j < rhs[0].size(); j++)
+        {
+            cells[grid[i][j]] = {i, j};
+        }
+    }
+}
+
+template <typename T>
+Grid<T>::Grid(const Grid<T> &rhs)
+{
+    grid = vector<vector<T>>(rhs.getRows());
+    for (int i = 0; i < rhs.getRows(); i++)
+    {
+        vector<T> v(rhs.getCols());
+        for (int j = 0; j < rhs.getCols(); j++)
+        {
+            v[j] = rhs.grid[i][j];
+        }
+        grid[i] = v;
+    }
+    cells.clear();
+
+    for (int i = 0; i < rhs.getRows(); i++)
+    {
+        for (int j = 0; j < rhs.getCols(); j++)
+        {
+            cells[grid[i][j]] = {i, j};
         }
     }
 }
@@ -79,17 +107,50 @@ Grid<T>::Grid(vector<vector<T>> &rhs)
 template <typename T>
 Grid<T> &Grid<T>::operator=(const vector<vector<T>> &rhs)
 {
-    if (grid != rhs)
+    grid = vector<vector<T>>(rhs.size());
+    for (int i = 0; i < rhs.size(); i++)
     {
-        grid = rhs;
-        cells.clear();
-
-        for (int i = 0; i < rhs.size(); i++)
+        vector<T> v(rhs[0].size());
+        for (int j = 0; j < rhs[0].size(); j++)
         {
-            for (int j = 0; j < rhs[0].size(); j++)
-            {
-                cells[grid[i][j]] = {i, j};
-            }
+            v[j] = rhs[i][j];
+        }
+        grid[i] = v;
+    }
+    cells.clear();
+
+    for (int i = 0; i < rhs.size(); i++)
+    {
+        for (int j = 0; j < rhs[0].size(); j++)
+        {
+            cells[grid[i][j]] = {i, j};
+        }
+    }
+
+    return *this;
+}
+
+template <typename T>
+Grid<T> &Grid<T>::operator=(const Grid<T> &rhs)
+{
+    grid = vector<vector<T>>(rhs.getRows());
+    for (int i = 0; i < rhs.getRows(); i++)
+    {
+        vector<T> v(rhs.getCols());
+        for (int j = 0; j < rhs.getCols(); j++)
+        {
+            v[j] = rhs.grid[i][j];
+        }
+
+        grid[i] = v;
+    }
+    cells.clear();
+
+    for (int i = 0; i < rhs.getRows(); i++)
+    {
+        for (int j = 0; j < rhs.getCols(); j++)
+        {
+            cells[grid[i][j]] = {i, j};
         }
     }
 
@@ -109,12 +170,6 @@ int Grid<T>::getCols() const
 }
 
 template <typename T>
-void Grid<T>::clearCells()
-{
-    cells.clear();
-}
-
-template <typename T>
 void Grid<T>::print(ostream &out)
 {
     for (int i = 0; i < getRows(); i++)
@@ -131,18 +186,12 @@ void Grid<T>::print(ostream &out)
         out << "\n";
     }
 
-    out << "\n";
-    for (int i = 0; i < getRows() * getCols(); i++)
-    {
-        out << i << ": { " << cells[i][0] << ", " << cells[i][1] << " }\n";
-    }
-    out << "\n";
-}
-
-template <typename T>
-void Grid<T>::assign(int i, int j, int v)
-{
-    cells[v] = {i, j};
+    // out << "\n";
+    // for (int i = 0; i < getRows() * getCols(); i++)
+    // {
+    //     out << i << ": { " << cells[i][0] << ", " << cells[i][1] << " }\n";
+    // }
+    // out << "\n";
 }
 
 template <typename T>

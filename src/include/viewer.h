@@ -11,8 +11,8 @@
 #include "knight.h"
 #include "SFML_Line.h"
 
-const int WIDTH = 1080;
-const int HEIGHT = 1080;
+const int WIDTH = 1042;
+const int HEIGHT = 1042;
 
 class Viewer
 {

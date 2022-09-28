@@ -20,15 +20,15 @@ Viewer::Viewer(int n)
 
 Viewer::~Viewer()
 {
-
+    delete window;
 }
 
 void Viewer::init()
 {
     window = new sf::RenderWindow(sf::VideoMode(WIDTH, HEIGHT), "KnightTour", sf::Style::Titlebar | sf::Style::Close);
-    window->setPosition({ 1920 / 2 - WIDTH / 2, 0 });
+    window->setPosition({ 1920 - WIDTH, 38 });
     font.loadFromFile("CourierPrime-Bold.ttf");
-    window->setFramerateLimit(144);
+    window->setFramerateLimit(30);
 }
 
 const bool Viewer::getWindowIsOpen() const
@@ -45,6 +45,16 @@ void Viewer::pollEvent()
             case sf::Event::Closed:
             {
                 window->close();
+                break;
+            }
+
+            case sf::Event::KeyPressed:
+            {
+                if (e.key.code == sf::Keyboard::Q)
+                {
+                    window->close();
+                }
+
                 break;
             }
 
@@ -82,13 +92,17 @@ void Viewer::drawGrid()
             sf::Vertex(sf::Vector2f(WIDTH, i * squareSize), BLACK)
         };
 
+        window->draw(line_h, 2, sf::Lines);
+    }
+
+    for (int j = 0; j < grid.getCols(); j++)
+    {
         sf::Vertex line_v[] =
         {
-            sf::Vertex(sf::Vector2f(i * squareSize, 0), BLACK),
-            sf::Vertex(sf::Vector2f(i * squareSize, HEIGHT), BLACK)
+            sf::Vertex(sf::Vector2f(j * squareSize, 0), BLACK),
+            sf::Vertex(sf::Vector2f(j * squareSize, HEIGHT), BLACK)
         };
 
-        window->draw(line_h, 2, sf::Lines);
         window->draw(line_v, 2, sf::Lines);
     }
 }
