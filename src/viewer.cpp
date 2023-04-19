@@ -11,7 +11,7 @@ Viewer::Viewer()
 
 Viewer::Viewer(int n)
 {
-    init();
+    // init();
     grid = Grid(n, n, UNVISITED);
     solveClosedTour(grid);
 
@@ -20,7 +20,7 @@ Viewer::Viewer(int n)
 
 Viewer::~Viewer()
 {
-    delete window;
+    // delete window;
 }
 
 void Viewer::init()

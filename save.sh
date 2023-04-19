@@ -1,7 +1,7 @@
 #!/bin/bash
 
 i=6
-while [ $i -le 256 ]
+while [ $i -le 64 ]
 do
     echo $i
     ./knight $i

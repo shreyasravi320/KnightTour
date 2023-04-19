@@ -1,8 +1,5 @@
 # KnightTour
 
-{1, 2,  2,  1, -1, -2, -2, -1}
-{2, 1, -1, -2, -2, -1,  1,  2}
-
 My implementation of a divide-conquer style algorithm that solves the Knight's
 tour problem for square boards of even side length.
 

@@ -807,4 +807,21 @@ void solveClosedTour(Grid<int> &grid)
 {
     Segment *segment = new Segment(grid.getRows(), grid.getCols(), 0, 0);
     solveClosedTourHelper(grid, segment, 0, 0, grid.getRows(), grid.getCols(), 0);
+
+    std::ofstream out("tours/" + std::to_string(grid.getRows()) + ".txt");
+    out << "[\n";
+
+    int j = 0;
+    for (int i = 0; i < grid.getRows(); i++)
+    {
+        out << "[";
+        for (j = 0; j < grid.getCols() - 1; j++)
+        {
+            out << grid[i][j] << ", ";
+        }
+        out << grid[i][j] << "],\n";
+    }
+    out << "],\n";
+
+    out.close();
 }
